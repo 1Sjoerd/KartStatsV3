@@ -7,7 +7,7 @@ KartStats is een karting resultaten tracker waarin je je resultaten kunt opslaan
 Doormiddel van groepen die gebruikers zelf aan kunnen maken is het mogelijk de resultaten van iedereen in de groep te categorieseren per circuit.<br>
 Om wat meer inzicht te creëren over hoe deze webapplicatie ongeveer gaat werken is deze schets gemaakt waarin de requirements verwerkt zijn.<br>
 
-![Conceptueel Model](KartStatsV2/Content/Images/Schets.png)
+![Conceptueel Model](KartStatsV3/wwwroot/Images/Schets.png)
 
 ## Requirements
 
