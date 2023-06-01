@@ -29,8 +29,8 @@ BEHEERDER:
 
 Contextdiagram:
 <br><br>
-![Context Diagram](KartStatsV2/Content/Images/ContextDiagram.png)
+![Context Diagram](KartStatsV3/wwwroot/Images/ContextDiagram.png)
 
 <br>Conceptueel model:
 <br><br>
-![Conceptueel Model](KartStatsV2/Content/Images/ConceptueelModel.png)
+![Conceptueel Model](KartStatsV3/wwwroot/Images/ConceptueelModel.png)
