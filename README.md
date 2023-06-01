@@ -27,10 +27,8 @@ BEHEERDER:
 
 ## Contextdiagram en Conceptueel model
 
-Contextdiagram:
-<br><br>
-![Context Diagram](KartStatsV3/wwwroot/Images/ContextDiagram.png)
+Om een idee te geven hoe de applicatie eruit komt te zien, heb ik een context diagram gemaakt. Ook heb ik een Conceptueel Model gemaakt die de structuur van de applicatie weergeeft.<br> Beide staan hieronder:<br>
 
-<br>Conceptueel model:
-<br><br>
-![Conceptueel Model](KartStatsV3/wwwroot/Images/ConceptueelModel.png)
+Context Diagram             |  Conceptueel Model
+:-------------------------:|:-------------------------:
+![Context Diagram](KartStatsV3/wwwroot/Images/ContextDiagram.png)  |  ![Conceptueel Model](KartStatsV3/wwwroot/Images/ConceptueelModel.png)
