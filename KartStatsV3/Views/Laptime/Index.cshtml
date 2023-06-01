@@ -1,0 +1,35 @@
+﻿@model List<KartStatsV3.Models.LapTime>
+
+@{
+    var circuits = ViewBag.Circuits as Dictionary<int, string>;
+    var sortedLapTimes = Model.OrderByDescending(l => l.DateTime).ToList();
+}
+
+<h2>Rondetijden</h2>
+@Html.ActionLink("Nieuwe rondetijd aanmaken", "Create")
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Circuit</th>
+            <th>Date and Time</th>
+            <th>Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lapTime in sortedLapTimes)
+        {
+            <tr>
+                <td>@circuits[lapTime.CircuitId]</td>
+                <td>@lapTime.DateTime</td>
+                <td>@lapTime.Time</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { userId = lapTime.UserId, circuitId = lapTime.CircuitId, dateTime = lapTime.DateTime })
+                    |
+                    @Html.ActionLink("Delete", "Delete", new { userId = lapTime.UserId, circuitId = lapTime.CircuitId, dateTime = lapTime.DateTime })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<KartStatsV3.Models.Group>
+
+@{
+    ViewData["Title"] = "Groepen";
+}
+
+<h2>Groepen<a style="margin-left:20px" class="btn btn-primary" asp-controller="Group" asp-action="Invites">Uitnodigingen</a></h2>
+<hr/>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Beheerder</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(group.Name, "Details", new { id = group.GroupId })</td>
+                    <td>@group.AdminUserId</td>
+                    <td>
+                        @if ((int)ViewContext.HttpContext.Session.GetInt32("Id") == group.AdminUserId)
+                        {
+                            <a style="margin:2px" class="btn btn-primary" asp-controller="Group" asp-action="Invite" asp-route-groupId="@group.GroupId">Nodig een gebruiker uit</a><br/>
+                            <a style="margin:2px; width:255px;" class="btn btn-primary" asp-controller="Group" asp-action="Edit" asp-route-id="@group.GroupId">Bewerken</a><br/>
+                            <a style="background-color:red;margin:2px; width:255px;" class="btn btn-primary" asp-controller="Group" asp-action="Delete" asp-route-id="@group.GroupId">Verwijderen</a>
+                        }
+                        @if ((int)ViewContext.HttpContext.Session.GetInt32("Id") != group.AdminUserId)
+                        {
+                            <form method="post" asp-controller="Group" asp-action="LeaveGroup" asp-route-groupId="@group.GroupId" class="inline-form">
+                                <button style="background-color:red; width:255px;" class="btn btn-primary" type="submit">Verlaat groep</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-10">
+            <a class="btn btn-default" asp-controller="Group" asp-action="Create">Nieuwe Groep Maken</a>
+        </div>
+    </div>
+</div>

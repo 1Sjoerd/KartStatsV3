@@ -1,0 +1,36 @@
+﻿@model KartStatsV3.Models.GroupDetailsViewModel
+
+@{
+    ViewBag.Title = "Groepsdetails";
+}
+
+<a style="margin-bottom:10px" class="btn btn-primary" asp-controller="Group" asp-action="Index">Ga terug</a>
+<h2>@Model.Group.Name</h2>
+<hr />
+
+<div class="container"><br>
+    <h3>Leden</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Rol</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Group.AdminUserName</td>
+                <td>Beheerder</td>
+            </tr>
+                @foreach (var user in Model.Members)
+                {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>Lid</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

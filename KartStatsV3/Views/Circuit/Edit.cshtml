@@ -1,0 +1,15 @@
+﻿@model Circuit
+
+<h1>Edit</h1>
+
+<form asp-action="Edit" asp-route-id="@Model.CircuitId">
+    <input type="hidden" asp-for="CircuitId" />
+
+    <div class="form-group">
+         <label asp-for="Name">Name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index">Back to List</a>
+</form>

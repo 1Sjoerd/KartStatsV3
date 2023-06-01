@@ -1,0 +1,27 @@
+﻿@model KartStatsV3.Models.LapTime
+
+<h2>Delete Lap Time</h2>
+
+<div>
+    <h4>Are you sure you want to delete this lap time?</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>User ID</dt>
+        <dd>@Model.UserId</dd>
+
+        <dt>Circuit ID</dt>
+        <dd>@Model.CircuitId</dd>
+
+        <dt>Date and Time</dt>
+        <dd>@Model.DateTime</dd>
+
+        <dt>Time</dt>
+        <dd>@Model.Time</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        <button type="submit" class="btn btn-danger">Delete</button>
+        @Html.ActionLink("Cancel", "Index", "Laptime", null, new { @class = "btn btn-default" })
+    }
+</div>

@@ -1,0 +1,37 @@
+﻿@model KartStatsV3.Models.LapTime
+
+<h2>Edit Lap Time</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.Label("Gereden op:")
+        @Html.DisplayFor(model => model.DateTime, new { @class = "form-control" })
+    </div><br>
+
+    <div class="form-group">
+        @Html.Label("Circuit")
+        @Html.DropDownListFor(model => model.CircuitId, ViewBag.Circuits as SelectList, "-- Select Circuit --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CircuitId)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Minuten")
+        @Html.TextBoxFor(model => model.Minutes, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Minutes)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Seconden")
+        @Html.TextBoxFor(model => model.Seconds, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Seconds)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Milliseconden")
+        @Html.TextBoxFor(model => model.Milliseconds, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Milliseconds)
+    </div><br>
+
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+}

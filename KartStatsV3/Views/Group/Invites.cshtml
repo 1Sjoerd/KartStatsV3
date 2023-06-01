@@ -1,0 +1,21 @@
+﻿@model List<KartStatsV3.Models.Invite>
+
+@{
+    ViewBag.Title = "Mijn uitnodigingen";
+}
+
+<a style="margin-bottom:10px" class="btn btn-primary" asp-controller="Group" asp-action="Index">Ga terug</a>
+<h2>Mijn uitnodigingen</h2>
+
+@foreach (var invite in Model)
+{
+    <div class="invite">
+        <p>@invite.FromUserId nodigt je uit om lid te worden van groep @invite.GroupId.</p>
+        <form action="@Url.Action("AcceptInvite", "Group", new { inviteId = invite.InviteId })" method="post">
+            <input type="submit" value="Accepteren" class="btn btn-success" />
+        </form>
+        <form action="@Url.Action("DeclineInvite", "Group", new { inviteId = invite.InviteId })" method="post">
+            <input type="submit" value="Weigeren" class="btn btn-danger" />
+        </form>
+    </div>
+}

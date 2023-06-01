@@ -1,0 +1,29 @@
+﻿@model List<Circuit>
+
+<h1>Circuits</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var circuit in Model)
+        {
+            <tr>
+                <td>@circuit.CircuitId</td>
+                <td>@circuit.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@circuit.CircuitId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@circuit.CircuitId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@circuit.CircuitId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New Circuit</a>

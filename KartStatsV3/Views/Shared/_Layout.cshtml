@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Html
+@{
+    var session = Context.Session.GetString("Id");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="stylesheet" href="~/css/bootstrap.css" />  <!-- Bootstrap CSS link here -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/js/modernizr.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="@Url.Action("Index", "Home")" title="KartStats" class="links">
+                    <img alt="KartStats Logo" style="width:220px" src="~/Images/logo.png">
+                </a>
+            </div>
+            <div class="navbar">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home", null, new { @style = "color:white;" })</li>
+                    <li>@Html.ActionLink("Groepen", "Index", "Group", null, new { @style = "color:white;" })</li>
+                    <li>@Html.ActionLink("Rondetijden", "Index", "Laptime", null, new { @style = "color:white;" })</li>
+                    @if (string.IsNullOrEmpty(session))
+                    {
+                        <li>@Html.ActionLink("Inloggen", "Login", "Account", null, new { @style = "color:white;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Uitloggen", "Logout", "Account", null, new { @style = "color:white;" })</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:14px" class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - KartStats</p>
+        </footer>
+    </div>
+
+    <script src="~/js/jquery.js"></script>
+    <!-- Bootstrap JS link, if you have it, would go here. -->
+    @RenderSection("scripts", required: false)
+</body>
+</html>

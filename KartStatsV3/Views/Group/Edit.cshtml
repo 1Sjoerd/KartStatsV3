@@ -1,0 +1,22 @@
+﻿@model KartStatsV3.Models.Group
+
+@{
+    ViewBag.Title = "Groep bewerken";
+}
+
+<a style="margin-bottom:10px" class="btn btn-primary" asp-controller="Group" asp-action="Index">Ga terug</a>
+<h2>Groep Bewerken</h2>
+<hr/>
+
+<form method="post">
+    <input type="hidden" asp-for="GroupId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Bewerken" class="btn btn-default" />
+    </div>
+</form>
