@@ -60,6 +60,37 @@ B-09.1: Er moet een functionaliteit zijn om nieuwe circuits toe te voegen aan he
 | UC08: Groep beheren | De Karter kan een groep aanmaken en leden uitnodigen/verwijderen. | Karter | De Karter is ingelogd. | 1. De Karter maakt een nieuwe groep aan. 2. De Karter nodigt andere Karters uit om lid te worden van de groep. 3. De Karter kan leden verwijderen uit de groep. | Geen | De Karter heeft succesvol een groep aangemaakt en leden uitgenodigd en/of verwijderd uit de groep. |
 | UC09: Circuit toevoegen | De Beheerder voegt een nieuw circuit toe aan het systeem. | Beheerder | De beheerder is ingelogd | 1. De Beheerder geeft aan dat hij een nieuw circuit wil toevoegen. 2. Het systeem biedt een functionaliteit om een nieuw circuit toe te voegen. 3. De Beheerder vult de benodigde gegevens van het nieuwe circuit in en bevestigt. 4. Het systeem voegt het nieuwe circuit toe aan de lijst van beschikbare circuits. | Geen | Het nieuwe circuit is succesvol toegevoegd aan het systeem. |
 
+## Test cases
+
+| Test Case | Use Case | Invoer | Verwachte Uitvoer |
+| --------- | -------- | ------ | ---------------- |
+| TC01      | UC01: Inloggen | Geldige gebruikersnaam en wachtwoord | Succesvolle inlog op het systeem |
+| TC02      | UC01: Inloggen | Geldige gebruikersnaam en ongeldig wachtwoord | Foutmelding "Ongeldig wachtwoord" |
+| TC03      | UC02: Account aanmaken | Geldige persoonlijke gegevens (naam, e-mailadres, wachtwoord) | Succesvol aanmaken van een nieuw account |
+| TC04      | UC02: Account aanmaken | Geen invoer | Foutmelding "Ontbrekende gegevens" |
+| TC05      | UC03: Resultaten invoeren | Geldige snelste ronde | Resultaten worden succesvol ingevoerd en gekoppeld aan de Karter |
+| TC06      | UC03: Resultaten invoeren | Geen snelste ronde ingevoerd | Foutmelding "Ontbrekende snelste ronde" |
+| TC07      | UC04: Resultaten inzien | - | Overzicht van resultaten van gereden heats (snelste rondes) wordt getoond |
+| TC08      | UC04: Resultaten inzien | - | Leeg overzicht van resultaten (geen gereden heats) |
+| TC09      | UC05: Resultaten (grafiek) inzien | - | Grafische weergave van de resultaten wordt getoond |
+| TC10      | UC05: Resultaten (grafiek) inzien | - | Geen resultaten beschikbaar, lege grafiek |
+
+## Test matrix
+
+| Test Case | FR-01 | B-01.1 | FR-02 | B-02.1 | B-02.2 | FR-03 | B-03.1 | B-03.2 | FR-04 | B-04.1 | FR-05 | B-05.1 |
+| --------- | ----- | ------ | ----- | ------ | ------ | ----- | ------- | ------- | ----- | ------- | ----- | ------- |
+| TC01      |   X   |   X    |       |        |        |       |         |         |       |         |       |         |
+| TC02      |   X   |   X    |       |        |        |       |         |         |       |         |       |         |
+| TC03      |       |        |   X   |   X    |   X    |       |         |         |       |         |       |         |
+| TC04      |       |        |   X   |   X    |   X    |       |         |         |       |         |       |         |
+| TC05      |       |        |       |        |        |   X   |    X    |   X    |       |         |       |         |
+| TC06      |       |        |       |        |        |   X   |    X    |   X    |       |         |       |         |
+| TC07      |       |        |       |        |        |       |         |         |   X   |    X    |       |         |
+| TC08      |       |        |       |        |        |       |         |         |   X   |    X    |       |         |
+| TC09      |       |        |       |        |        |       |         |         |       |         |   X   |    X    |
+| TC10      |       |        |       |        |        |       |         |         |       |         |   X   |    X    |
+
+
 ## Contextdiagram en Conceptueel model
 
 Om een idee te geven hoe de applicatie eruit komt te zien, heb ik een context diagram gemaakt. Ook heb ik een Conceptueel Model gemaakt die de structuur van de applicatie weergeeft.<br> Beide staan hieronder:<br>
