@@ -4,6 +4,7 @@ using KartStatsV3.BLL.Interfaces;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using YourNamespace.DAL.Repositories;
 
 namespace KartStatsV3.Controllers
 {
@@ -13,15 +14,17 @@ namespace KartStatsV3.Controllers
         private readonly IInviteService _inviteService;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly ICircuitService _circuitService;
         private readonly UserService _userService;
 
-        public GroupController(IGroupService groupService, IInviteService inviteService, IConfiguration configuration, IUserRepository userRepository)
+        public GroupController(IGroupService groupService, IInviteService inviteService, IConfiguration configuration, IUserRepository userRepository, ICircuitService circuitService)
         {
             _groupService = groupService;
             _inviteService = inviteService;
             _configuration = configuration;
             _userRepository = userRepository;
             _userService = new UserService(_userRepository);
+            _circuitService = circuitService;
         }
 
 
@@ -252,7 +255,16 @@ namespace KartStatsV3.Controllers
             return RedirectToAction("Index");
         }
 
-
+        public ActionResult AddCircuitToGroup(int groupId)
+        {
+            var circuits = _circuitService.GetAllCircuits(); // Haal alle circuits op.
+            var groupCircuitViewModel = new GroupCircuitViewModel
+            {
+                GroupId = groupId,
+                Circuits = circuits
+            };
+            return View(groupCircuitViewModel);
+        }
 
     }
 }

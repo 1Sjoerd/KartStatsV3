@@ -1,0 +1,23 @@
+﻿@model KartStatsV3.Models.ResultViewModel
+
+<h2>Resultaten voor groep: @Model.GroupName op circuit: @Model.CircuitName</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Gebruikers ID</th>
+            <th>Datum/Tijd</th>
+            <th>Rondetijd</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lapTime in Model.LapTimes)
+        {
+            <tr>
+                <td>@lapTime.UserId</td>
+                <td>@lapTime.DateTime</td>
+                <td>@lapTime.Time</td>
+            </tr>
+        }
+    </tbody>
+</table>

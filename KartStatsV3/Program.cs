@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllersWithViews();
-services.AddSession(); // Voeg sessieondersteuning toe
+services.AddSession();
 
 services.AddSingleton<IGroupRepository, GroupRepository>();
 services.AddScoped<IGroupService, GroupService>();
@@ -28,6 +28,9 @@ services.AddScoped<ICircuitService, CircuitService>();
 
 services.AddSingleton<ILaptimeRepository, LaptimeRepository>();
 services.AddScoped<ILaptimeService, LaptimeService>();
+
+services.AddSingleton<IResultRepository, ResultRepository>();
+services.AddScoped<IResultService, ResultService>();
 
 services.AddSingleton<IUserRepository, UserRepository>();
 services.AddScoped<IUserService, UserService>();
@@ -54,7 +57,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSession(); // Voeg sessieondersteuning toe
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

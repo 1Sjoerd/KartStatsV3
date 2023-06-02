@@ -286,12 +286,7 @@ namespace KartStatsV3.DAL.Repositories
                 using (MySqlCommand cmd = new MySqlCommand())
                 {
                     cmd.Connection = conn;
-                    cmd.CommandText = @"
-    SELECT DISTINCT g.GroupId, g.Name, g.AdminUserId FROM Groups g 
-    LEFT JOIN GroupMembers gm ON g.GroupId = gm.GroupId 
-    WHERE g.AdminUserId = @userId OR gm.UserId = @userId";
-
-
+                    cmd.CommandText = @"SELECT DISTINCT g.GroupId, g.Name, g.AdminUserId FROM Groups g LEFT JOIN GroupMembers gm ON g.GroupId = gm.GroupId WHERE g.AdminUserId = @userId OR gm.UserId = @userId";
                     cmd.Parameters.AddWithValue("@userId", userId);
 
                     using (var reader = cmd.ExecuteReader())
@@ -332,5 +327,55 @@ namespace KartStatsV3.DAL.Repositories
                 }
             }
         }
+
+        public void AddCircuitToGroup(int groupId, int circuitId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO GroupCircuits(GroupId, CircuitId) VALUES(@GroupId, @CircuitId)";
+                    cmd.Parameters.AddWithValue("@GroupId", groupId);
+                    cmd.Parameters.AddWithValue("@CircuitId", circuitId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<Circuit> GetGroupCircuits(int groupId)
+        {
+            List<Circuit> circuits = new List<Circuit>();
+
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "SELECT Circuits.* FROM Circuits INNER JOIN GroupCircuits ON Circuits.CircuitId = GroupCircuits.CircuitId WHERE GroupCircuits.GroupId = @GroupId";
+                    cmd.Parameters.AddWithValue("@GroupId", groupId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Circuit circuit = new Circuit
+                            {
+                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
+                                Name = reader["Name"].ToString(),
+                            };
+
+                            circuits.Add(circuit);
+                        }
+                    }
+                }
+            }
+
+            return circuits;
+        }
+
     }
 }
