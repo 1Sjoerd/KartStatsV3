@@ -19,5 +19,6 @@ namespace KartStatsV3.BLL.Interfaces
         List<Group> GetGroupsForUser(int userId);
         bool IsUserInGroup(int userId, int groupId);
         List<User> GetGroupMembers(int groupId);
+        void AddCircuitToGroup(int groupId, int circuitId);
     }
 }

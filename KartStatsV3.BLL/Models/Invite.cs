@@ -8,11 +8,20 @@ namespace KartStatsV3.Models
 {
     public class Invite
     {
-        public int InviteId { get; set; }
-        public int GroupId { get; set; }
-        public int FromUserId { get; set; } 
-        public int ToUserId { get; set; } 
-        public string Status { get; set; } 
+        public int InviteId { get; private set; }
+        public int GroupId { get; private set; }
+        public int FromUserId { get; private set; }
+        public int ToUserId { get; private set; }
+        public InviteStatus Status { get; private set; }
+
+        public Invite(int inviteId, int groupId, int fromUserId, int toUserId, InviteStatus status)
+        {
+            InviteId = inviteId;
+            GroupId = groupId;
+            FromUserId = fromUserId;
+            ToUserId = toUserId;
+            Status = status;
+        }
     }
 
     public enum InviteStatus

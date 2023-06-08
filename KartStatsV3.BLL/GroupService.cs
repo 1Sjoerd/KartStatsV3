@@ -66,5 +66,10 @@ namespace KartStatsV3.BLL
         {
             return _groupRepository.GetGroupMembers(groupId);
         }
+
+        public void AddCircuitToGroup(int groupId, int circuitId)
+        {
+            _groupRepository.AddCircuitToGroup(groupId, circuitId);
+        }
     }
 }

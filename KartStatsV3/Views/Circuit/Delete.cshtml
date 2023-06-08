@@ -12,7 +12,7 @@
         <dt class="col-sm-2">Name</dt>
         <dd class="col-sm-10">@Model.Name</dd>
     </dl>
-    <form asp-action="DeleteConfirmed" asp-route-id="@Model.CircuitId">
+    <form asp-action="Delete" asp-route-id="@Model.CircuitId">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

@@ -25,16 +25,39 @@ namespace KartStatsV3.DAL.Repositories
             using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 conn.Open();
+
                 using (MySqlCommand cmd = new MySqlCommand())
                 {
                     cmd.Connection = conn;
-                    cmd.CommandText = "SELECT l.* FROM LapTime l " +
-                                      "INNER JOIN GroupMembers g on l.UserId = g.UserId " +
-                                      "WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId " +
-                                      "UNION " +
-                                      "SELECT l.* FROM LapTime l " +
-                                      "INNER JOIN Groups g on l.UserId = g.AdminUserId " +
-                                      "WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId";
+                    cmd.CommandText = @"
+                SELECT l.UserId, l.CircuitId, l.DateTime, l.Time
+                FROM (
+                    SELECT *,
+                           (
+                               SELECT COUNT(*)
+                               FROM (
+                                   SELECT l.* FROM LapTime l 
+                                   INNER JOIN GroupMembers g on l.UserId = g.UserId 
+                                   WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId 
+                                   UNION 
+                                   SELECT l.* FROM LapTime l 
+                                   INNER JOIN Groups g on l.UserId = g.AdminUserId 
+                                   WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId
+                               ) AS l2
+                               WHERE l2.UserId = l.UserId AND l2.DateTime >= l.DateTime
+                           ) AS rank
+                    FROM (
+                        SELECT l.* FROM LapTime l 
+                        INNER JOIN GroupMembers g on l.UserId = g.UserId 
+                        WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId 
+                        UNION 
+                        SELECT l.* FROM LapTime l 
+                        INNER JOIN Groups g on l.UserId = g.AdminUserId 
+                        WHERE g.GroupId = @GroupId AND l.CircuitId = @CircuitId
+                    ) AS l
+                ) AS l
+                WHERE l.rank <= 3
+                ORDER BY l.DateTime DESC;";
                     cmd.Parameters.AddWithValue("@GroupId", groupId);
                     cmd.Parameters.AddWithValue("@CircuitId", circuitId);
 
@@ -57,5 +80,6 @@ namespace KartStatsV3.DAL.Repositories
 
             return lapTimes;
         }
+
     }
 }

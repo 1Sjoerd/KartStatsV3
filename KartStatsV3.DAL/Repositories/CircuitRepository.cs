@@ -34,11 +34,10 @@ namespace YourNamespace.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Circuit circuit = new Circuit
-                            {
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                Name = reader["Name"].ToString()
-                            };
+                            Circuit circuit = new Circuit(
+                                Convert.ToInt32(reader["CircuitId"]),
+                                reader["Name"].ToString()
+                            );
 
                             circuits.Add(circuit);
                         }
@@ -66,11 +65,10 @@ namespace YourNamespace.DAL.Repositories
                     {
                         if (reader.Read())
                         {
-                            circuit = new Circuit
-                            {
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                Name = reader["Name"].ToString()
-                            };
+                            circuit = new Circuit(
+                                Convert.ToInt32(reader["CircuitId"]),
+                                reader["Name"].ToString()
+                            );
                         }
                     }
                 }

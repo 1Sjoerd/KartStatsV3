@@ -41,16 +41,15 @@ namespace KartStatsV3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Group group)
+        public ActionResult Create(GroupViewModel viewModel)
         {
-            ModelState.Remove("AdminUserName");
             if (ModelState.IsValid)
             {
+                Group group = new Group(viewModel.GroupId, viewModel.Name, viewModel.AdminUserId);
                 _groupService.AddGroup(group);
                 return RedirectToAction("Index");
             }
-
-            return View(group);
+            return View(viewModel);
         }
 
         public ActionResult Details(int id)
@@ -76,24 +75,35 @@ namespace KartStatsV3.Controllers
         public ActionResult Edit(int id)
         {
             var group = _groupService.GetGroup(id);
-            if (group == null)
+            var viewModel = new GroupViewModel
             {
-                return NotFound();
-            }
-            return View(group);
+                GroupId = group.GroupId,
+                Name = group.Name,
+                AdminUserId = group.AdminUserId
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Edit(Group group)
+        public ActionResult Edit(GroupViewModel viewModel)
         {
-            ModelState.Remove("AdminUserName");
             if (ModelState.IsValid)
             {
+                var group = _groupService.GetGroup(viewModel.GroupId);
+                if (group == null)
+                {
+                    return NotFound();
+                }
+
+                group.SetName(viewModel.Name); // Gebruik de nieuwe methode om de naam te zetten
+
                 _groupService.UpdateGroup(group);
                 return RedirectToAction("Index");
             }
-            return View(group);
+            return View(viewModel);
         }
+
 
         [HttpGet]
         public ActionResult Delete(int id)
@@ -255,16 +265,34 @@ namespace KartStatsV3.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult AddCircuitToGroup(int groupId)
+        public ActionResult AddCircuit(int groupId)
         {
-            var circuits = _circuitService.GetAllCircuits(); // Haal alle circuits op.
-            var groupCircuitViewModel = new GroupCircuitViewModel
+            var availableCircuits = _circuitService.GetAllCircuits();
+            ViewBag.Circuits = availableCircuits;
+
+            var model = new GroupCircuitViewModel
             {
-                GroupId = groupId,
-                Circuits = circuits
+                GroupId = groupId
             };
-            return View(groupCircuitViewModel);
+
+            return View(model);
         }
 
+        [HttpPost]
+        public ActionResult AddCircuit(GroupCircuitViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Voeg het circuit toe aan de groep
+                _groupService.AddCircuitToGroup(model.GroupId, model.SelectedCircuitId);
+
+                // Redirect naar de groepspagina of een andere gewenste actie
+                return RedirectToAction("Index");
+            }
+
+            // Als de ModelState niet geldig is, laad het formulier opnieuw met de huidige modelgegevens
+            ViewBag.Circuits = _circuitService.GetAllCircuits();
+            return View(model);
+        }
     }
 }

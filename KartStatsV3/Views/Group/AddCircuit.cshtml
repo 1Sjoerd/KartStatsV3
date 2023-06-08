@@ -1,0 +1,16 @@
+﻿@model GroupCircuitViewModel
+
+<h2>Add Circuit to Group</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.GroupId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedCircuitId)
+        @Html.DropDownListFor(model => model.SelectedCircuitId, new SelectList((IEnumerable<Circuit>)ViewBag.Circuits, "CircuitId", "Name"), "-- Select Circuit --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SelectedCircuitId)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Circuit</button>
+}

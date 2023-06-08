@@ -26,6 +26,9 @@
                         {
                             <a style="margin:2px" class="btn btn-primary" asp-controller="Group" asp-action="Invite" asp-route-groupId="@group.GroupId">Nodig een gebruiker uit</a><br/>
                             <a style="margin:2px; width:255px;" class="btn btn-primary" asp-controller="Group" asp-action="Edit" asp-route-id="@group.GroupId">Bewerken</a><br/>
+
+                            <a style="margin:2px; width:255px;" class="btn btn-primary" asp-controller="Group" asp-action="AddCircuit" asp-route-groupId="@group.GroupId">Circuit toevoegen</a><br/>
+
                             <a style="background-color:red;margin:2px; width:255px;" class="btn btn-primary" asp-controller="Group" asp-action="Delete" asp-route-id="@group.GroupId">Verwijderen</a>
                         }
                         @if ((int)ViewContext.HttpContext.Session.GetInt32("Id") != group.AdminUserId)

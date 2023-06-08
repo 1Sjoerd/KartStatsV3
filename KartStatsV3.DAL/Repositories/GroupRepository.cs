@@ -59,13 +59,12 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Group group = new Group
-                            {
-                                GroupId = Convert.ToInt32(reader["GroupId"]),
-                                Name = reader["Name"].ToString(),
-                                AdminUserId = Convert.ToInt32(reader["AdminUserId"]),
-                                AdminUserName = reader["AdminUserName"].ToString()
-                            };
+                            Group group = new Group(
+                                Convert.ToInt32(reader["GroupId"]),
+                                reader["Name"].ToString(),
+                                Convert.ToInt32(reader["AdminUserId"]),
+                                reader["AdminUserName"].ToString()
+                            );
 
                             groups.Add(group);
                         }
@@ -94,13 +93,12 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            group = new Group
-                            {
-                                GroupId = Convert.ToInt32(reader["GroupId"]),
-                                Name = reader["Name"].ToString(),
-                                AdminUserId = Convert.ToInt32(reader["AdminUserId"]),
-                                AdminUserName = reader["AdminUserName"].ToString()
-                            };
+                            group = new Group(
+                                Convert.ToInt32(reader["GroupId"]),
+                                reader["Name"].ToString(),
+                                Convert.ToInt32(reader["AdminUserId"]),
+                                reader["AdminUserName"].ToString()
+                            );
                         }
                     }
                 }
@@ -293,12 +291,11 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Group group = new Group
-                            {
-                                GroupId = Convert.ToInt32(reader["GroupId"]),
-                                Name = reader["Name"].ToString(),
-                                AdminUserId = Convert.ToInt32(reader["AdminUserId"])
-                            };
+                            Group group = new Group(
+                                Convert.ToInt32(reader["GroupId"]),
+                                reader["Name"].ToString(),
+                                Convert.ToInt32(reader["AdminUserId"])
+                            );
 
                             groups.Add(group);
                         }
@@ -328,23 +325,6 @@ namespace KartStatsV3.DAL.Repositories
             }
         }
 
-        public void AddCircuitToGroup(int groupId, int circuitId)
-        {
-            using (MySqlConnection conn = new MySqlConnection(_connectionString))
-            {
-                conn.Open();
-                using (MySqlCommand cmd = new MySqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "INSERT INTO GroupCircuits(GroupId, CircuitId) VALUES(@GroupId, @CircuitId)";
-                    cmd.Parameters.AddWithValue("@GroupId", groupId);
-                    cmd.Parameters.AddWithValue("@CircuitId", circuitId);
-
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
         public List<Circuit> GetGroupCircuits(int groupId)
         {
             List<Circuit> circuits = new List<Circuit>();
@@ -362,11 +342,10 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Circuit circuit = new Circuit
-                            {
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                Name = reader["Name"].ToString(),
-                            };
+                            Circuit circuit = new Circuit(
+                                Convert.ToInt32(reader["CircuitId"]),
+                                reader["Name"].ToString()
+                            );
 
                             circuits.Add(circuit);
                         }
@@ -377,5 +356,21 @@ namespace KartStatsV3.DAL.Repositories
             return circuits;
         }
 
+        public void AddCircuitToGroup(int groupId, int circuitId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (MySqlCommand cmd = new MySqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO GroupCircuits (GroupId, CircuitId) VALUES (@GroupId, @CircuitId)";
+                    cmd.Parameters.AddWithValue("@GroupId", groupId);
+                    cmd.Parameters.AddWithValue("@CircuitId", circuitId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

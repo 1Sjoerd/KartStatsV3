@@ -38,15 +38,15 @@ namespace KartStatsV3.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Circuit circuit)
+        public IActionResult Create(CircuitViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                Circuit circuit = new Circuit(viewModel.CircuitId, viewModel.Name);
                 _circuitBLL.AddCircuit(circuit);
                 return RedirectToAction("Index");
             }
-
-            return View(circuit);
+            return View(viewModel);
         }
 
         public IActionResult Edit(int id)
@@ -58,25 +58,32 @@ namespace KartStatsV3.Controllers
                 return NotFound();
             }
 
-            return View(circuit);
+            var viewModel = new CircuitViewModel
+            {
+                CircuitId = circuit.CircuitId,
+                Name = circuit.Name
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Circuit circuit)
+        public IActionResult Edit(int id, CircuitViewModel viewModel)
         {
-            if (id != circuit.CircuitId)
+            if (id != viewModel.CircuitId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                Circuit circuit = new Circuit(viewModel.CircuitId, viewModel.Name);
                 _circuitBLL.UpdateCircuit(circuit);
                 return RedirectToAction("Index");
             }
 
-            return View(circuit);
+            return View(viewModel);
         }
 
         public IActionResult Delete(int id)

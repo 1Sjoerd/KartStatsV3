@@ -3,12 +3,6 @@
     public class GroupCircuitViewModel
     {
         public int GroupId { get; set; }
-        public List<Circuit> Circuits { get; set; }
-
-        public GroupCircuitViewModel()
-        {
-            Circuits = new List<Circuit>();
-        }
+        public int SelectedCircuitId { get; set; }
     }
-
 }
