@@ -2,6 +2,17 @@
 
 KartStats is een webapplicatie waarin je jou kart resultaten kunt bijhouden en kunt vergelijken met de resultaten van anderen.
 
+## Inhoudsopgave
+- [Inleiding](#inleiding)
+- [Requirements](#requirements)
+- [Use Cases](#use-cases)
+- [Test Cases](#test-cases)
+- [Test Matrix](#test-matrix)
+- [Contextdiagram en Conceptueel Model](#contextdiagram-en-conceptueel-model)
+- [Architectuur](#architectuur)
+- [Domain Model/Classdiagram](#domain-modelclassdiagram)
+- [Database ontwerp](#database-ontwerp)
+
 ## Inleiding
 KartStats is een karting resultaten tracker waarin je je resultaten kunt opslaan en jezelf kunt vergelijken met andere gebruikers.<br>
 Doormiddel van groepen die gebruikers zelf aan kunnen maken is het mogelijk de resultaten van iedereen in de groep te categorieseren per circuit.<br>
