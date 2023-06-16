@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace KartStatsV3.BLL.Interfaces
 {
@@ -15,5 +16,7 @@ namespace KartStatsV3.BLL.Interfaces
         List<LapTime> GetLapTimesByCircuit(int circuitId);
         List<LapTime> GetLapTimesByUser(int userId);
         LapTime GetLapTime(int userId, int circuitId, DateTime dateTime);
+        Dictionary<int, string> GetCircuitsDictionary();
+        List<Circuit> GetCircuitsSelectList();
     }
 }

@@ -5,6 +5,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using YourNamespace.DAL.Repositories;
+using Microsoft.Ajax.Utilities;
 
 namespace KartStatsV3.Controllers
 {
@@ -12,18 +13,14 @@ namespace KartStatsV3.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly IInviteService _inviteService;
-        private readonly IConfiguration _configuration;
-        private readonly IUserRepository _userRepository;
         private readonly ICircuitService _circuitService;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public GroupController(IGroupService groupService, IInviteService inviteService, IConfiguration configuration, IUserRepository userRepository, ICircuitService circuitService)
+        public GroupController(IGroupService groupService, IInviteService inviteService, ICircuitService circuitService, IUserService userService)
         {
             _groupService = groupService;
             _inviteService = inviteService;
-            _configuration = configuration;
-            _userRepository = userRepository;
-            _userService = new UserService(_userRepository);
+            _userService = userService;
             _circuitService = circuitService;
         }
 
@@ -54,35 +51,50 @@ namespace KartStatsV3.Controllers
 
         public ActionResult Details(int id)
         {
-            var group = _groupService.GetGroup(id);
-            if (group == null)
+            try
             {
-                return NotFound();
+                var group = _groupService.GetGroup(id);
+                var members = _groupService.GetGroupMembers(id);
+
+                var viewModel = new GroupDetailsViewModel
+                {
+                    Group = group,
+                    Members = members
+                };
+
+                return View(viewModel);
             }
-
-            var members = _groupService.GetGroupMembers(id);
-
-            var viewModel = new GroupDetailsViewModel
+            catch (ArgumentNullException ex)
             {
-                Group = group,
-                Members = members
-            };
-
-            return View(viewModel);
+                var viewModel = new GroupDetailsViewModel
+                {
+                    Group = new Group(1, "test", 1, "Naam"),
+                    Members = new List<User>(),
+                    Message = ex.Message,
+                };
+                return View(viewModel);
+            }
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var group = _groupService.GetGroup(id);
-            var viewModel = new GroupViewModel
+            try
             {
-                GroupId = group.GroupId,
-                Name = group.Name,
-                AdminUserId = group.AdminUserId
-            };
+                var group = _groupService.GetGroup(id);
+                var viewModel = new GroupViewModel
+                {
+                    GroupId = group.GroupId,
+                    Name = group.Name,
+                    AdminUserId = group.AdminUserId
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return View("Error", new ErrorViewModel { Message = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -108,12 +120,19 @@ namespace KartStatsV3.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var group = _groupService.GetGroup(id);
-            if (group == null)
+            try
             {
-                return NotFound();
+                var group = _groupService.GetGroup(id);
+                if (group == null)
+                {
+                    return NotFound();
+                }
+                return View(group);
             }
-            return View(group);
+            catch (ArgumentNullException ex)
+            {
+                return View("Error", new ErrorViewModel { Message = ex.Message });
+            }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -133,30 +152,68 @@ namespace KartStatsV3.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Invite(InviteViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var toUserId = _userService.GetIdByUsername(model.ToUserName);
+                    var fromUserId = _userService.GetIdByUsername(_userService.GetUsername());
+
+                    var invite = new Invite(
+                        groupId: model.GroupId,
+                        fromUserId: (int)fromUserId,
+                        toUserId: (int)toUserId,
+                        status: InviteStatus.Pending
+                    );
+
+                    _inviteService.CreateInvite(invite);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return View(model);
+        }
+
         public ActionResult Invites()
         {
-            var userId = _userService.GetIdByUsername(_userService.GetUsername());
-            var invites = _inviteService.GetInvitesByToUserId((int)userId);
-            return View(invites);
+            try
+            {
+                var userId = _userService.GetIdByUsername(_userService.GetUsername());
+                var invites = _inviteService.GetInvitesByToUserId((int)userId);
+                return View(invites);
+            }
+            catch (ArgumentNullException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(new List<Invite>());
+            }
         }
 
         [HttpPost]
         public ActionResult LeaveGroup(int groupId)
         {
-            var group = _groupService.GetGroup(groupId);
-            var currentUser = _userService.GetIdByUsername(_userService.GetUsername());
-
-            if (group == null)
+            try
             {
-                return NotFound();
-            }
+                var currentUser = _userService.GetIdByUsername(_userService.GetUsername());
+                bool success = _groupService.RemoveMember((int)currentUser, groupId);
 
-            if (group.AdminUserId == currentUser)
+                if (!success)
+                {
+                    return NotFound();
+                }
+            }
+            catch (InvalidOperationException ex)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, "Beheerders kunnen hun eigen groep niet verlaten");
+                return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
-
-            _groupService.RemoveMember((int)currentUser, groupId);
 
             return RedirectToAction("Index");
         }
@@ -164,69 +221,22 @@ namespace KartStatsV3.Controllers
         [HttpPost]
         public ActionResult RemoveMember(int groupId, int userId)
         {
-            var group = _groupService.GetGroup(groupId);
-            var currentUser = _userService.GetIdByUsername(_userService.GetUsername());
-
-            if (group == null)
+            try
             {
-                return NotFound();
+                bool success = _groupService.RemoveMember(userId, groupId);
+
+                if (!success)
+                {
+                    return NotFound();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
 
-            if (group.AdminUserId != currentUser)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest, "Beheerders kunnen hun eigen groep niet verlaten");
-            }
-
-            _groupService.RemoveMember(userId, groupId);
-
-            return RedirectToAction("Details", new RouteValueDictionary(new { id = groupId }));
+            return RedirectToAction("Index");
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Invite(InviteViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var toUser = _userService.GetIdByUsername(model.ToUserName);
-                var fromUserId = _userService.GetIdByUsername(_userService.GetUsername());
-                var group = _groupService.GetGroup(model.GroupId);
-
-                if (toUser == null)
-                {
-                    ModelState.AddModelError("", "Gebruikersnaam niet gevonden.");
-                }
-                else if (group.AdminUserId != fromUserId)
-                {
-                    ModelState.AddModelError("", "Alleen de beheerder kan gebruikers uitnodigen.");
-                }
-                else if (_groupService.IsUserInGroup((int)toUser, model.GroupId))
-                {
-                    ModelState.AddModelError("", "Deze gebruiker is al een lid van de groep.");
-                }
-                else if (group.AdminUserId == toUser)
-                {
-                    ModelState.AddModelError("", "De beheerder kan zichzelf niet uitnodigen.");
-                }
-                else
-                {
-                    var invite = new Invite
-                    {
-                        GroupId = model.GroupId,
-                        FromUserId = (int)fromUserId,
-                        ToUserId = (int)toUser,
-                        Status = InviteStatus.Pending.ToString()
-                    };
-                    _inviteService.CreateInvite(invite);
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-
-            return View(model);
-        }
-
-
-
 
         public ActionResult AcceptInvite(int inviteId)
         {
@@ -239,13 +249,13 @@ namespace KartStatsV3.Controllers
             }
 
             // Update de status van de uitnodiging naar Geaccepteerd
-            invite.Status = InviteStatus.Accepted.ToString();
+            invite.UpdateStatus(InviteStatus.Accepted);
             _inviteService.UpdateInvite(invite);
 
             // Voeg de gebruiker toe aan de groep
             _groupService.AddMember(invite.GroupId, invite.ToUserId);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");     
         }
 
         public ActionResult DeclineInvite(int inviteId)
@@ -259,7 +269,7 @@ namespace KartStatsV3.Controllers
             }
 
             // Update de status van de uitnodiging naar Geweigerd
-            invite.Status = InviteStatus.Declined.ToString();
+            invite.UpdateStatus(InviteStatus.Declined);
             _inviteService.UpdateInvite(invite);
 
             return RedirectToAction("Index");

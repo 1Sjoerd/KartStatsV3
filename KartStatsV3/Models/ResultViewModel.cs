@@ -9,10 +9,14 @@ namespace KartStatsV3.Models
 {
     public class ResultViewModel
     {
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public string GroupName { get; set; }
-        public int CircuitId { get; set; }
+        public List<Group> AllGroups { get; set; } = new List<Group>();
+
+        public int? CircuitId { get; set; }
         public string CircuitName { get; set; }
-        public List<LapTime> LapTimes { get; set; }
+        public List<Circuit> GroupCircuits { get; set; } = new List<Circuit>();
+
+        public List<LapTime> LapTimes { get; set; } = new List<LapTime>();
     }
 }

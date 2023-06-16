@@ -11,10 +11,12 @@ namespace KartStatsV3.BLL
     public class CircuitService : ICircuitService
     {
         private readonly ICircuitRepository _circuitDAL;
+        private readonly IGroupRepository _groupRepository;
 
-        public CircuitService(ICircuitRepository circuitDAL)
+        public CircuitService(ICircuitRepository circuitDAL, IGroupRepository groupRepository)
         {
             _circuitDAL = circuitDAL;
+            _groupRepository = groupRepository;
         }
 
         public List<Circuit> GetAllCircuits()
@@ -40,6 +42,10 @@ namespace KartStatsV3.BLL
         public void DeleteCircuit(int circuitId)
         {
             _circuitDAL.DeleteCircuit(circuitId);
+        }
+        public List<Circuit> GetCircuitsByGroupId(int groupId)
+        {
+            return _circuitDAL.GetCircuitsByGroupId(groupId);
         }
     }
 }

@@ -1,23 +1,42 @@
-﻿@model KartStatsV3.Models.ResultViewModel
-
-<h2>Resultaten voor groep: @Model.GroupName op circuit: @Model.CircuitName</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Gebruikers ID</th>
-            <th>Datum/Tijd</th>
-            <th>Rondetijd</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var lapTime in Model.LapTimes)
+﻿<form method="get" id="selectionForm">
+    <select name="groupId" onchange="document.getElementById('selectionForm').submit();">
+        <option>-- Selecteer een groep --</option>
+        @foreach (var group in Model.AllGroups)
         {
-            <tr>
-                <td>@lapTime.UserId</td>
-                <td>@lapTime.DateTime</td>
-                <td>@lapTime.Time</td>
-            </tr>
+            if (Model.GroupId == group.GroupId)
+            {
+                <option value="@group.GroupId" selected>@group.Name</option>
+            }
+            else
+            {
+                <option value="@group.GroupId">@group.Name</option>
+            }
         }
-    </tbody>
-</table>
+    </select>
+
+    @if (Model?.GroupId != null)
+    {
+        <select name="circuitId">
+            <option>-- Selecteer een circuit --</option>
+            @foreach (var circuit in Model.GroupCircuits)
+            {
+                if (Model.CircuitId == circuit.CircuitId)
+                {
+                    <option value="@circuit.CircuitId" selected>@circuit.Name</option>
+                }
+                else
+                {
+                    <option value="@circuit.CircuitId">@circuit.Name</option>
+                }
+            }
+        </select>
+    }
+    else
+    {
+        <select name="circuitId" disabled>
+            <option>-- Selecteer een circuit --</option>
+        </select>
+    }
+
+    <input type="submit" value="Laad resultaten" />
+</form>

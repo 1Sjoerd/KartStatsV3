@@ -2,27 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using KartStatsV3.BLL.Interfaces;
 using KartStatsV3.Models;
-using YourNamespace.BLL.Services;
+using KartStatsV3.BLL.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using KartStatsV3.BLL;
+using KartStatsV3.DAL.Repositories;
 
-namespace YourNamespace.Controllers
+namespace KartStatsV3.Controllers
 {
     public class LapTimeController : Controller
     {
         private readonly ILaptimeService _laptimeService;
-        private readonly ICircuitService _circuitService;
 
-        public LapTimeController(ILaptimeService lapTimeBLL, ICircuitService circuitService)
+        public LapTimeController(ILaptimeService lapTimeBLL)
         {
             _laptimeService = lapTimeBLL;
-            _circuitService = circuitService;
         }
 
         public IActionResult Index()
         {
-            List<Circuit> circuits = _circuitService.GetAllCircuits();
-            Dictionary<int, string> circuitDictionary = circuits.ToDictionary(c => c.CircuitId, c => c.Name);
+            Dictionary<int, string> circuitDictionary = _laptimeService.GetCircuitsDictionary();
             ViewBag.Circuits = circuitDictionary;
             List<LapTime> lapTimes = _laptimeService.GetLapTimesByUser((int)HttpContext.Session.GetInt32("Id"));
             return View(lapTimes);
@@ -30,21 +28,33 @@ namespace YourNamespace.Controllers
 
         public IActionResult Create()
         {
-            List<Circuit> circuits = _circuitService.GetAllCircuits();
+            List<Circuit> circuits = _laptimeService.GetCircuitsSelectList();
             ViewBag.Circuits = new SelectList(circuits, "CircuitId", "Name");
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(LapTime lapTime)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(LapTimeViewModel lapTimeViewModel)
         {
             if (ModelState.IsValid)
             {
+                var lapTime = new LapTime(
+                    lapTimeViewModel.UserId,
+                    lapTimeViewModel.CircuitId,
+                    lapTimeViewModel.DateTime,
+                    lapTimeViewModel.Time,
+                    lapTimeViewModel.Minutes,
+                    lapTimeViewModel.Seconds,
+                    lapTimeViewModel.Milliseconds);
+
                 _laptimeService.AddLapTime(lapTime);
-                return RedirectToAction("Index", "Laptime");
+
+                return RedirectToAction(nameof(Index));
             }
 
-            return View(lapTime);
+            ViewBag.Circuits = _laptimeService.GetCircuitsSelectList();
+            return View(lapTimeViewModel);
         }
 
         public IActionResult Edit(int userId, int circuitId, DateTime dateTime)
@@ -56,31 +66,33 @@ namespace YourNamespace.Controllers
                 return NotFound();
             }
 
-            List<Circuit> circuits = _circuitService.GetAllCircuits();
-
-            if (circuits == null || !circuits.Any())
-            {
-                return NotFound("Geen circuits gevonden.");
-            }
-
+            List<Circuit> circuits = _laptimeService.GetCircuitsSelectList();
             ViewBag.Circuits = new SelectList(circuits, "CircuitId", "Name");
-
             return View(lapTime);
         }
 
         [HttpPost]
-        public IActionResult Edit(LapTime lapTime)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(LapTimeViewModel lapTimeViewModel)
         {
             if (ModelState.IsValid)
             {
+                LapTime lapTime = new LapTime(
+                    lapTimeViewModel.UserId,
+                    lapTimeViewModel.CircuitId,
+                    lapTimeViewModel.DateTime,
+                    lapTimeViewModel.Time,
+                    lapTimeViewModel.Minutes,
+                    lapTimeViewModel.Seconds,
+                    lapTimeViewModel.Milliseconds
+                );
+
                 _laptimeService.UpdateLapTime(lapTime);
                 return RedirectToAction("Index", "Laptime");
             }
 
-            List<Circuit> circuits = _circuitService.GetAllCircuits();
-            ViewBag.Circuits = new SelectList(circuits, "CircuitId", "Name");
-
-            return View(lapTime);
+            ViewBag.Circuits = _laptimeService.GetCircuitsSelectList();
+            return View(lapTimeViewModel);
         }
 
         public IActionResult Delete(int userId, int circuitId, DateTime dateTime)

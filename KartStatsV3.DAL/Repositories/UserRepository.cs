@@ -44,13 +44,41 @@ namespace KartStatsV3.DAL
                     {
                         if (reader.Read())
                         {
-                            user = new User
-                            {
-                                Id = reader.GetInt32(0),
-                                Username = reader.GetString(1),
-                                PasswordHash = reader.GetString(2),
-                                Email = reader.GetString(3)
-                            };
+                            user = new User(
+                                reader.GetInt32(0),     // Id
+                                reader.GetString(1),   // Username
+                                reader.GetString(2),   // PasswordHash
+                                reader.GetString(3)    // Email
+                            );
+                        }
+                    }
+                }
+            }
+
+            return user;
+        }
+
+        public User GetUserById(int id)
+        {
+            User user = null;
+
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (MySqlCommand command = new MySqlCommand("SELECT Id, Username, PasswordHash, Email FROM Users WHERE Id = @id", connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new User(
+                                reader.GetInt32(0),     // Id
+                                reader.GetString(1),   // Username
+                                reader.GetString(2),   // PasswordHash
+                                reader.GetString(3)    // Email
+                            );
                         }
                     }
                 }
@@ -74,13 +102,12 @@ namespace KartStatsV3.DAL
                     {
                         if (reader.Read())
                         {
-                            user = new User
-                            {
-                                Id = reader.GetInt32(0),
-                                Username = reader.GetString(1),
-                                PasswordHash = reader.GetString(2),
-                                Email = reader.GetString(3)
-                            };
+                            user = new User(
+                                reader.GetInt32(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetString(3)
+                            );
                         }
                     }
                 }
@@ -104,13 +131,12 @@ namespace KartStatsV3.DAL
                     {
                         if (reader.Read())
                         {
-                            user = new User
-                            {
-                                Id = reader.GetInt32(0),
-                                Username = reader.GetString(1),
-                                PasswordHash = reader.GetString(2),
-                                Email = reader.GetString(3)
-                            };
+                            user = new User(
+                                reader.GetInt32(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetString(3)
+                            );
                         }
                     }
                 }

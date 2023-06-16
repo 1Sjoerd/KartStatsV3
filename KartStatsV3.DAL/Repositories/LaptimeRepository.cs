@@ -97,13 +97,12 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            LapTime lapTime = new LapTime
-                            {
-                                UserId = Convert.ToInt32(reader["UserId"]),
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                DateTime = Convert.ToDateTime(reader["DateTime"]),
-                                Time = Convert.ToString(reader["Time"])
-                            };
+                            LapTime lapTime = new LapTime(
+                                Convert.ToInt32(reader["UserId"]),
+                                Convert.ToInt32(reader["CircuitId"]),
+                                Convert.ToDateTime(reader["DateTime"]),
+                                Convert.ToString(reader["Time"])
+                            );
 
                             lapTimes.Add(lapTime);
                         }
@@ -131,13 +130,12 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            LapTime lapTime = new LapTime
-                            {
-                                UserId = Convert.ToInt32(reader["UserId"]),
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                DateTime = Convert.ToDateTime(reader["DateTime"]),
-                                Time = Convert.ToString(reader["Time"])
-                            };
+                            LapTime lapTime = new LapTime(
+                                Convert.ToInt32(reader["UserId"]),
+                                Convert.ToInt32(reader["CircuitId"]),
+                                Convert.ToDateTime(reader["DateTime"]),
+                                Convert.ToString(reader["Time"])
+                            );
 
                             lapTimes.Add(lapTime);
                         }
@@ -167,13 +165,12 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         if (reader.Read())
                         {
-                            lapTime = new LapTime
-                            {
-                                UserId = Convert.ToInt32(reader["UserId"]),
-                                CircuitId = Convert.ToInt32(reader["CircuitId"]),
-                                DateTime = Convert.ToDateTime(reader["DateTime"]),
-                                Time = Convert.ToString(reader["Time"])
-                            };
+                            lapTime = new LapTime(
+                                Convert.ToInt32(reader["UserId"]),
+                                Convert.ToInt32(reader["CircuitId"]),
+                                Convert.ToDateTime(reader["DateTime"]),
+                                Convert.ToString(reader["Time"])
+                            );
                         }
                     }
                 }

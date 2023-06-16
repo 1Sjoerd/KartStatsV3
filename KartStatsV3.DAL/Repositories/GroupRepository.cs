@@ -188,12 +188,11 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            User user = new User
-                            {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Username = reader["Username"].ToString(),
-                                Email = reader["Email"].ToString()
-                            };
+                            User user = new User(
+                                Convert.ToInt32(reader["Id"]),
+                                reader["Username"].ToString(),
+                                reader["Email"].ToString()
+                            );
 
                             users.Add(user);
                         }
@@ -203,7 +202,6 @@ namespace KartStatsV3.DAL.Repositories
 
             return users;
         }
-
 
         public void AddGroupMember(int groupId, string userId)
         {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using YourNamespace.BLL.Services;
+using KartStatsV3.BLL.Services;
 using YourNamespace.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);

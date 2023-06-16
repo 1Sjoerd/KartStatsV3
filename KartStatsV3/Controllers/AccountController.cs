@@ -16,15 +16,11 @@ namespace KartStatsV3.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserService _userService;
-        private readonly IConfiguration _configuration;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public AccountController(IConfiguration configuration, IUserRepository userRepository)
+        public AccountController(IUserService userService)
         {
-            _configuration = configuration;
-            _userRepository = userRepository;
-            _userService = new UserService(userRepository);
+            _userService = userService;
         }
 
         public ActionResult Login()
@@ -63,11 +59,7 @@ namespace KartStatsV3.Controllers
         {
             if (ModelState.IsValid)
             {
-                User newUser = new User
-                {
-                    Username = model.Username,
-                    Email = model.Email
-                };
+                User newUser = new User(model.Username, model.Email);
 
                 _userService.RegisterUser(newUser, model.Password);
 

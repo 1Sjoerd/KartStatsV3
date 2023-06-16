@@ -14,13 +14,26 @@ namespace KartStatsV3.Models
         public int ToUserId { get; private set; }
         public InviteStatus Status { get; private set; }
 
-        public Invite(int inviteId, int groupId, int fromUserId, int toUserId, InviteStatus status)
+        public Invite(int inviteId,int groupId, int fromUserId, int toUserId, InviteStatus status)
         {
             InviteId = inviteId;
             GroupId = groupId;
             FromUserId = fromUserId;
             ToUserId = toUserId;
             Status = status;
+        }
+
+        public Invite(int groupId, int fromUserId, int toUserId, InviteStatus status)
+        {
+            GroupId = groupId;
+            FromUserId = fromUserId;
+            ToUserId = toUserId;
+            Status = status;
+        }
+
+        public void UpdateStatus(InviteStatus newStatus)
+        {
+            Status = newStatus;
         }
     }
 

@@ -7,6 +7,8 @@
 <a style="margin-bottom:10px" class="btn btn-primary" asp-controller="Group" asp-action="Index">Ga terug</a>
 <h2>Mijn uitnodigingen</h2>
 
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 @foreach (var invite in Model)
 {
     <div class="invite">

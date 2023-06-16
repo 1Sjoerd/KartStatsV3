@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using KartStatsV3.Models;
 using System.Data;
 using KartStatsV3.BLL.Interfaces;
+using System.Xml.Linq;
 
 
 namespace YourNamespace.DAL.Repositories
@@ -124,6 +125,38 @@ namespace YourNamespace.DAL.Repositories
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public List<Circuit> GetCircuitsByGroupId(int groupId)
+        {
+            var circuits = new List<Circuit>();
+
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+
+                using (MySqlCommand cmd = new MySqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "SELECT * FROM Circuits c JOIN GroupCircuits gc ON c.CircuitId = gc.CircuitId WHERE gc.GroupId = @groupId";
+                    cmd.Parameters.AddWithValue("@groupId", groupId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int circuitId = Convert.ToInt32(reader["CircuitId"]);
+                            string name = reader["Name"].ToString();
+
+                            var circuit = new Circuit(circuitId, name);
+
+                            circuits.Add(circuit);
+                        }
+                    }
+                }
+            }
+
+            return circuits;
         }
     }
 }

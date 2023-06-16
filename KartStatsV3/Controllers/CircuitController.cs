@@ -6,22 +6,22 @@ namespace KartStatsV3.Controllers
 {
     public class CircuitController : Controller
     {
-        private readonly ICircuitService _circuitBLL;
+        private readonly ICircuitService _circuitService;
 
         public CircuitController(ICircuitService circuitBLL)
         {
-            _circuitBLL = circuitBLL;
+            _circuitService = circuitBLL;
         }
 
         public IActionResult Index()
         {
-            var circuits = _circuitBLL.GetAllCircuits();
+            var circuits = _circuitService.GetAllCircuits();
             return View(circuits);
         }
 
         public IActionResult Details(int id)
         {
-            var circuit = _circuitBLL.GetCircuitById(id);
+            var circuit = _circuitService.GetCircuitById(id);
 
             if (circuit == null)
             {
@@ -43,7 +43,7 @@ namespace KartStatsV3.Controllers
             if (ModelState.IsValid)
             {
                 Circuit circuit = new Circuit(viewModel.CircuitId, viewModel.Name);
-                _circuitBLL.AddCircuit(circuit);
+                _circuitService.AddCircuit(circuit);
                 return RedirectToAction("Index");
             }
             return View(viewModel);
@@ -51,7 +51,7 @@ namespace KartStatsV3.Controllers
 
         public IActionResult Edit(int id)
         {
-            var circuit = _circuitBLL.GetCircuitById(id);
+            var circuit = _circuitService.GetCircuitById(id);
 
             if (circuit == null)
             {
@@ -79,7 +79,7 @@ namespace KartStatsV3.Controllers
             if (ModelState.IsValid)
             {
                 Circuit circuit = new Circuit(viewModel.CircuitId, viewModel.Name);
-                _circuitBLL.UpdateCircuit(circuit);
+                _circuitService.UpdateCircuit(circuit);
                 return RedirectToAction("Index");
             }
 
@@ -88,7 +88,7 @@ namespace KartStatsV3.Controllers
 
         public IActionResult Delete(int id)
         {
-            var circuit = _circuitBLL.GetCircuitById(id);
+            var circuit = _circuitService.GetCircuitById(id);
 
             if (circuit == null)
             {
@@ -102,7 +102,7 @@ namespace KartStatsV3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _circuitBLL.DeleteCircuit(id);
+            _circuitService.DeleteCircuit(id);
             return RedirectToAction("Index");
         }
     }

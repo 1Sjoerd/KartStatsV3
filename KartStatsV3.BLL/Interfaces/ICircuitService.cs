@@ -14,5 +14,6 @@ namespace KartStatsV3.BLL.Interfaces
         void AddCircuit(Circuit circuit);
         void UpdateCircuit(Circuit circuit);
         void DeleteCircuit(int circuitId);
+        List<Circuit> GetCircuitsByGroupId(int groupId);
     }
 }

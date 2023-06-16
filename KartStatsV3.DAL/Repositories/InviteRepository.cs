@@ -53,14 +53,13 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         while (reader.Read())
                         {
-                            Invite invite = new Invite
-                            {
-                                InviteId = Convert.ToInt32(reader["InviteId"]),
-                                GroupId = Convert.ToInt32(reader["GroupId"]),
-                                FromUserId = Convert.ToInt32(reader["FromUserId"]),
-                                ToUserId = Convert.ToInt32(reader["ToUserId"]),
-                                Status = reader["Status"].ToString()
-                            };
+                            Invite invite = new Invite(
+                                Convert.ToInt32(reader["InviteId"]),
+                                Convert.ToInt32(reader["GroupId"]),
+                                Convert.ToInt32(reader["FromUserId"]),
+                                Convert.ToInt32(reader["ToUserId"]),
+                                InviteStatus.Pending // Geef de gewenste statuswaarde op
+                            );
 
                             invites.Add(invite);
                         }
@@ -155,14 +154,13 @@ namespace KartStatsV3.DAL.Repositories
                     {
                         if (reader.Read())
                         {
-                            invite = new Invite
-                            {
-                                InviteId = Convert.ToInt32(reader["InviteId"]),
-                                GroupId = Convert.ToInt32(reader["GroupId"]),
-                                FromUserId = Convert.ToInt32(reader["FromUserId"]),
-                                ToUserId = Convert.ToInt32(reader["ToUserId"]),
-                                Status = reader["Status"].ToString()
-                            };
+                            invite = new Invite(
+                                Convert.ToInt32(reader["InviteId"]),
+                                Convert.ToInt32(reader["GroupId"]),
+                                Convert.ToInt32(reader["FromUserId"]),
+                                Convert.ToInt32(reader["ToUserId"]),
+                                (InviteStatus)Enum.Parse(typeof(InviteStatus), reader["Status"].ToString())
+                            );
                         }
                     }
                 }

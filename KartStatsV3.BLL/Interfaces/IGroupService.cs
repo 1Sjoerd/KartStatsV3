@@ -14,7 +14,7 @@ namespace KartStatsV3.BLL.Interfaces
         void AddGroup(Group group);
         bool UpdateGroup(Group group);
         bool DeleteGroup(int groupId);
-        void RemoveMember(int userId, int groupId);
+        bool RemoveMember(int userId, int groupId);
         bool AddMember(int userId, int groupId);
         List<Group> GetGroupsForUser(int userId);
         bool IsUserInGroup(int userId, int groupId);

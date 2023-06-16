@@ -14,5 +14,6 @@ namespace KartStatsV3.BLL.Interfaces
         string GetUsername();
         void RegisterUser(User user, string password);
         bool IsUserAdmin(Group group);
+
     }
 }

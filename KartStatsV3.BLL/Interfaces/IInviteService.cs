@@ -9,9 +9,8 @@ namespace KartStatsV3.BLL.Interfaces
 {
     public interface IInviteService
     {
-        void CreateInvite(Invite invite);
+        bool CreateInvite(Invite invite);
         List<Invite> GetInvitesByToUserId(int toUserId);
-        void UpdateInviteStatus(int inviteId, string status);
         Invite GetInvite(int inviteId);
         bool UpdateInvite(Invite invite);
     }

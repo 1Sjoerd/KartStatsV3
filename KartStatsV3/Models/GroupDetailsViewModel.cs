@@ -11,6 +11,8 @@ namespace KartStatsV3.Models
     {
         public Group Group { get; set; }
         public List<User> Members { get; set; }
+
+        public string Message { get; set; }
     }
 
 }
