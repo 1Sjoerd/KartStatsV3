@@ -98,3 +98,19 @@ Om een idee te geven hoe de applicatie eruit komt te zien, heb ik een context di
 Context Diagram             |  Conceptueel Model
 :-------------------------:|:-------------------------:
 ![Context Diagram](KartStatsV3/wwwroot/Images/ContextDiagram.png)  |  ![Conceptueel Model](KartStatsV3/wwwroot/Images/ConceptueelModel.png)
+
+## Architectuur
+
+Een architectuurdiagram geeft een beeld van hoe een applicatie is opgebouwd. In het geval van KartStats is dit in 3 lagen, de presentatielaag, businesslaag en datalaag. Onderstaand diagram geeft een duidelijk beeld van de structuur van de applicatie:<br><br>
+![Context Diagram](KartStatsV3/wwwroot/Images/Architectuur.png)<br><br>
+
+## Domain Model/Classdiagram
+
+Ook heb ik een classdiagram gemaakt:<br><br>
+![Context Diagram](KartStatsV3/wwwroot/Images/DomainModel.png)<br><br>
+In dit model heb ik de repositories weggelaten omdat de interfaces van de repo's dezelfde methodes bevatten en er anders dubbele informatie in het diagram zou komen te staan wat overbodig is.<br><br>
+
+## Database ontwerp
+
+Een database ontwerp of ERD is een visuele representatie van relaties tussen entiteiten in je database. Om een beeld te geven van hoe mijn database eruit ziet, heb ik een database ontwerp gemaakt.<br><br>
+![Context Diagram](KartStatsV3/wwwroot/Images/ERD.png)<br>
