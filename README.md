@@ -1,3 +1,7 @@
+# VOOR DE EINDOPLEVERING
+
+De laatste diagrammen/modellen(Architectuur, Domain Model en ERD) zijn toegevoegd aan de documentatie. Deze staan nu ook in de inhoudsopgave zodat je er makkelijk naar kunt navigeren
+
 # Welkom bij KartStats!
 
 KartStats is een webapplicatie waarin je jou kart resultaten kunt bijhouden en kunt vergelijken met de resultaten van anderen.
